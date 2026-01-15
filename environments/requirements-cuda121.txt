@@ -12,12 +12,12 @@
 # Installation:
 #   pip install -r environments/requirements-cuda121.txt
 
---index-url https://download.pytorch.org/whl/cu121
 --extra-index-url https://pypi.org/simple
-
-torch>=2.0.0
-torchvision>=0.15.0
-torchaudio>=2.0.0
+--index-url https://download.pytorch.org/whl/cu121
 
 # Include base requirements
 -r requirements.txt
+
+torch>=2.0.0
+torchaudio>=2.0.0
+torchvision>=0.15.0

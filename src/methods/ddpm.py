@@ -1,13 +1,12 @@
+#!/usr/bin/env python3
 """
 Denoising Diffusion Probabilistic Models (DDPM)
 """
 
-import math
-from typing import Dict, Tuple, Optional, Literal, List
+from typing import Dict, Tuple
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from .base import BaseMethod
 
@@ -25,26 +24,26 @@ class DDPM(BaseMethod):
         super().__init__(model, device)
 
         self.num_timesteps = int(num_timesteps)
-        self. beta_start = beta_start
-        self. beta_end = beta_end
+        self.beta_start = beta_start
+        self.beta_end = beta_end
         # TODO: Implement your own init
 
     # =========================================================================
     # You can add, delete or modify as many functions as you would like
     # =========================================================================
-    
+
     # Pro tips: If you have a lot of pseudo parameters that you will specify for each
     # model run but will be fixed once you specified them (say in your config),
     # then you can use super().register_buffer(...) for these parameters
 
     # Pro tips 2: If you need a specific broadcasting for your tensors,
     # it's a good idea to write a general helper function for that
-    
+
     # =========================================================================
     # Forward process
     # =========================================================================
 
-    def forward_process(self): # TODO: Add your own arguments here
+    def forward_process(self):  # TODO: Add your own arguments here
         # TODO: Implement the forward (noise adding) process of DDPM
         raise NotImplementedError
 
@@ -59,7 +58,7 @@ class DDPM(BaseMethod):
         Args:
             x_0: Clean data samples of shape (batch_size, channels, height, width)
             **kwargs: Additional method-specific arguments
-        
+
         Returns:
             loss: Scalar loss tensor for backpropagation
             metrics: Dictionary of metrics for logging (e.g., {'mse': 0.1})
@@ -70,7 +69,7 @@ class DDPM(BaseMethod):
     # =========================================================================
     # Reverse process (sampling)
     # =========================================================================
-    
+
     @torch.no_grad()
     def reverse_process(self, x_t: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
         """
@@ -80,7 +79,7 @@ class DDPM(BaseMethod):
             x_t: Noisy samples at time t (batch_size, channels, height, width)
             t: the time
             **kwargs: Additional method-specific arguments
-        
+
         Returns:
             x_prev: Noisy samples at time t-1 (batch_size, channels, height, width)
         """
@@ -92,7 +91,7 @@ class DDPM(BaseMethod):
         batch_size: int,
         image_shape: Tuple[int, int, int],
         # TODO: add your arguments here
-        **kwargs
+        **kwargs,
     ) -> torch.Tensor:
         """
         TODO: Implement DDPM sampling loop: start from pure noise, iterate through all the time steps using reverse_process()
@@ -101,7 +100,7 @@ class DDPM(BaseMethod):
             batch_size: Number of samples to generate
             image_shape: Shape of each image (channels, height, width)
             **kwargs: Additional method-specific arguments (e.g., num_steps)
-        
+
         Returns:
             samples: Generated samples of shape (batch_size, *image_shape)
         """

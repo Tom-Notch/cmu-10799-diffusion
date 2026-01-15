@@ -34,7 +34,6 @@ pip install modal
 modal token new
 ```
 
-
 ### 3. Weights & Biases (wandb) logging on Modal
 
 ```bash
@@ -68,10 +67,11 @@ modal app list
 ## Local Workflow (coding & small debugging)
 
 1. Edit code in your favorite editor locally on your laptop
-2. Run quick unit tests locally (can use notebooks)
-3. Develop and mini debug (e.g. see if the code compiles)
+1. Run quick unit tests locally (can use notebooks)
+1. Develop and mini debug (e.g. see if the code compiles)
 
 ### One-time setup: Download dataset to Modal volume (RECOMMENDED)
+
 ```bash
 # Download dataset from HuggingFace Hub and cache it in Modal's persistent volume
 # This only needs to be done ONCE - the dataset will be reused for all future training runs
@@ -81,6 +81,7 @@ modal run modal_app.py --action download
 This downloads the CelebA dataset and saves it in HuggingFace Arrow format to `/data/celeba` in your Modal volume. After this, all training runs with `from_hub: true` will automatically use the cached version instead of re-downloading, significantly speeding up startup time.
 
 ### Training on Modal (cloud GPU)
+
 ```bash
 # Train DDPM (runs on L40S GPU in the cloud, uses configs/ddpm.yaml)
 modal run modal_app.py --action train --method ddpm
@@ -95,10 +96,12 @@ modal run modal_app.py --action train --method ddpm --config configs/custom.yaml
 **Note**: The configs default to `from_hub: true`. If you've run the download step, the cached dataset will be used automatically (no redownload). If you haven't cached it yet, the dataset will be downloaded from HuggingFace Hub on the first run.
 
 **Config options:**
+
 - `from_hub: true` - Uses cached dataset at `/data/celeba` if available, otherwise downloads from HuggingFace Hub
 - `from_hub: false` - Loads from traditional folder structure (`/data/celeba/train/images/`)
 
 ### Generate samples
+
 ```bash
 # Generate samples from trained model
 modal run modal_app.py --action sample --method ddpm
@@ -108,6 +111,7 @@ modal run modal_app.py --action sample --method ddpm --checkpoint checkpoints/dd
 ```
 
 ### Evaluate (using torch-fidelity)
+
 ```bash
 # Evaluate using torch-fidelity (computes FID and KID)
 modal run modal_app.py --action evaluate --method ddpm

@@ -19,8 +19,9 @@ cmu-10799-diffusion/
 ```
 
 **TODOs in this directory:**
+
 1. train.py: incorporate your sampling scheme to the training pipeline and save generated samples as images for logging
-2. sample.py: incorporate your sampling scheme to the training pipeline and save generated samples as images
+1. sample.py: incorporate your sampling scheme to the training pipeline and save generated samples as images
 
 ## Subdirectories
 
@@ -49,9 +50,10 @@ src/
 ```
 
 **TODOs in this directory:**
+
 1. src/data/celeba.py: fill in your data transforms functions
-2. src/methods/ddpm.py: implement everything in this file
-3. src/models/unet.py: implement the unet model architecture and its forward pass
+1. src/methods/ddpm.py: implement everything in this file
+1. src/models/unet.py: implement the unet model architecture and its forward pass
 
 ### `configs/` - Hyperparameter Configurations
 
@@ -82,6 +84,7 @@ environments/
 ```
 
 **Which one to use?**
+
 - Have a laptop/no GPU? → Use `requirements-cpu.txt` + Modal for training
 - Have an NVIDIA GPU? → Use the matching CUDA version (check with `nvidia-smi`)
 
@@ -97,6 +100,7 @@ docs/
 ```
 
 **Start here based on your setup:**
+
 - **Laptop user (no GPU)?** → Read [QUICKSTART-MODAL.md](QUICKSTART-MODAL.md)
 - **Have a GPU or cluster?** → Read [SETUP.md](SETUP.md)
 

@@ -24,28 +24,49 @@ NUM_STEPS=1000
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case $1 in
-        --method) METHOD="$2"; shift 2 ;;
-        --checkpoint) CHECKPOINT="$2"; shift 2 ;;
-        --metrics) METRICS="$2"; shift 2 ;;
-        --num-samples) NUM_SAMPLES="$2"; shift 2 ;;
-        --batch-size) BATCH_SIZE="$2"; shift 2 ;;
-        --num-steps) NUM_STEPS="$2"; shift 2 ;;
-        *) echo "Unknown option: $1"; exit 1 ;;
-    esac
+	case $1 in
+	--method)
+		METHOD="$2"
+		shift 2
+		;;
+	--checkpoint)
+		CHECKPOINT="$2"
+		shift 2
+		;;
+	--metrics)
+		METRICS="$2"
+		shift 2
+		;;
+	--num-samples)
+		NUM_SAMPLES="$2"
+		shift 2
+		;;
+	--batch-size)
+		BATCH_SIZE="$2"
+		shift 2
+		;;
+	--num-steps)
+		NUM_STEPS="$2"
+		shift 2
+		;;
+	*)
+		echo "Unknown option: $1"
+		exit 1
+		;;
+	esac
 done
 
 if [ -z "$CHECKPOINT" ]; then
-    echo "Error: --checkpoint is required"
-    echo ""
-    echo "Usage: $0 --method ddpm --checkpoint <path> [options]"
-    echo ""
-    echo "Options:"
-    echo "  --metrics <fid,kid,is>    Metrics to compute (default: kid)"
-    echo "  --num-samples <N>         Number of samples (default: 1000)"
-    echo "  --batch-size <N>          Batch size (default: 256)"
-    echo "  --num-steps <N>           Sampling steps (default: 1000)"
-    exit 1
+	echo "Error: --checkpoint is required"
+	echo ""
+	echo "Usage: $0 --method ddpm --checkpoint <path> [options]"
+	echo ""
+	echo "Options:"
+	echo "  --metrics <fid,kid,is>    Metrics to compute (default: kid)"
+	echo "  --num-samples <N>         Number of samples (default: 1000)"
+	echo "  --batch-size <N>          Batch size (default: 256)"
+	echo "  --num-steps <N>           Sampling steps (default: 1000)"
+	exit 1
 fi
 
 echo "=========================================="
@@ -72,7 +93,7 @@ MODAL_CMD="modal run modal_app.py::main --action evaluate_torch_fidelity \
     --num-steps $NUM_STEPS"
 
 # Run Modal command
-eval $MODAL_CMD
+eval "$MODAL_CMD"
 
 echo ""
 echo "=========================================="

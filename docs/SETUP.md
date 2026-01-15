@@ -3,6 +3,7 @@
 This guide covers how to set up and run `cmu-10799-diffusion` on different platforms.
 
 ## Table of Contents
+
 - [Quick Start](#quick-start)
 - [Step-by-Step Setup](#step-by-step-setup)
   - [Option A: Using setup scripts (Recommended - Auto-detect)](#option-a-using-setup-scripts-recommended---auto-detect)
@@ -13,7 +14,7 @@ This guide covers how to set up and run `cmu-10799-diffusion` on different platf
 - [SLURM Clusters](#slurm-clusters)
 - [Troubleshooting](#troubleshooting)
 
----
+______________________________________________________________________
 
 ## Quick Start
 
@@ -30,11 +31,12 @@ This guide covers how to set up and run `cmu-10799-diffusion` on different platf
 | AMD GPU | `requirements-rocm.txt` |
 
 **Check your CUDA version** (if you have an NVIDIA GPU):
+
 ```bash
 nvidia-smi  # Look at top right for "CUDA Version: XX.X"
 ```
 
----
+______________________________________________________________________
 
 ## Step-by-Step Setup
 
@@ -59,6 +61,7 @@ cd cmu-10799-diffusion
 ```
 
 The setup scripts will:
+
 - Auto-detect your GPU (NVIDIA/AMD) or use CPU if none found
 - Create a named virtual environment (`.venv-cpu`, `.venv-cuda121`, etc.)
 - Install the appropriate PyTorch version
@@ -74,6 +77,7 @@ source .venv-cuda121/bin/activate    # If CUDA 12.1 was detected
 ```
 
 **Manual environment selection:**
+
 ```bash
 ./setup-uv.sh cpu      # Force CPU-only (for Modal users)
 ./setup-uv.sh cuda121  # Force CUDA 12.1
@@ -83,6 +87,7 @@ source .venv-cuda121/bin/activate    # If CUDA 12.1 was detected
 
 **Multiple environments:**
 You can have different environments on the same machine:
+
 ```bash
 ./setup-uv.sh cpu      # Creates .venv-cpu
 ./setup-uv.sh cuda121  # Creates .venv-cuda121
@@ -92,7 +97,7 @@ source .venv-cpu/bin/activate      # For CPU work
 source .venv-cuda121/bin/activate  # For GPU work
 ```
 
----
+______________________________________________________________________
 
 ### Option B: Manual setup with uv
 
@@ -101,16 +106,19 @@ source .venv-cuda121/bin/activate  # For GPU work
 #### Step 1: Install uv
 
 **macOS/Linux:**
+
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 **Or with pip:**
+
 ```bash
 pip install uv
 ```
@@ -133,6 +141,7 @@ uv venv .venv-cuda121          # For CUDA 12.1
 #### Step 4: Activate the environment
 
 **macOS/Linux:**
+
 ```bash
 source .venv-cpu/bin/activate        # For CPU
 # or
@@ -140,6 +149,7 @@ source .venv-cuda121/bin/activate    # For GPU
 ```
 
 **Windows:**
+
 ```powershell
 .venv-cpu\Scripts\Activate.ps1       # PowerShell
 # or
@@ -174,10 +184,11 @@ python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.
 ```
 
 Expected output:
+
 - **With GPU:** `PyTorch 2.x.x, CUDA: True`
 - **Without GPU:** `PyTorch 2.x.x, CUDA: False`
 
----
+______________________________________________________________________
 
 ### Option C: Manual setup with pip + venv
 
@@ -203,6 +214,7 @@ python -m venv .venv-cuda121    # For example, for CUDA 12.1
 #### Step 3: Activate the environment
 
 **macOS/Linux:**
+
 ```bash
 source .venv-cpu/bin/activate        # For CPU
 # or
@@ -210,6 +222,7 @@ source .venv-cuda121/bin/activate    # For GPU
 ```
 
 **Windows:**
+
 ```powershell
 .venv-cpu\Scripts\Activate.ps1       # PowerShell
 # or

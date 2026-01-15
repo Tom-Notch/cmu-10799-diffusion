@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Methods module for cmu-10799-diffusion.
 
@@ -9,6 +10,6 @@ from .base import BaseMethod
 from .ddpm import DDPM
 
 __all__ = [
-    'BaseMethod',
-    'DDPM',
+    "BaseMethod",
+    "DDPM",
 ]

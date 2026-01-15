@@ -22,26 +22,50 @@ METRICS="kid"
 NUM_SAMPLES=1000
 BATCH_SIZE=256
 NUM_STEPS=1000
-GENERATED_DIR=""  # Will be set based on checkpoint location
-CACHE_DIR=""      # Will be set based on checkpoint location
+GENERATED_DIR="" # Will be set based on checkpoint location
+CACHE_DIR=""     # Will be set based on checkpoint location
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
-    case $1 in
-        --checkpoint) CHECKPOINT="$2"; shift 2 ;;
-        --method) METHOD="$2"; shift 2 ;;
-        --dataset-path) DATASET_PATH="$2"; shift 2 ;;
-        --metrics) METRICS="$2"; shift 2 ;;
-        --num-samples) NUM_SAMPLES="$2"; shift 2 ;;
-        --batch-size) BATCH_SIZE="$2"; shift 2 ;;
-        --num-steps) NUM_STEPS="$2"; shift 2 ;;
-        *) echo "Unknown option: $1"; exit 1 ;;
-    esac
+	case $1 in
+	--checkpoint)
+		CHECKPOINT="$2"
+		shift 2
+		;;
+	--method)
+		METHOD="$2"
+		shift 2
+		;;
+	--dataset-path)
+		DATASET_PATH="$2"
+		shift 2
+		;;
+	--metrics)
+		METRICS="$2"
+		shift 2
+		;;
+	--num-samples)
+		NUM_SAMPLES="$2"
+		shift 2
+		;;
+	--batch-size)
+		BATCH_SIZE="$2"
+		shift 2
+		;;
+	--num-steps)
+		NUM_STEPS="$2"
+		shift 2
+		;;
+	*)
+		echo "Unknown option: $1"
+		exit 1
+		;;
+	esac
 done
 
 if [ -z "$CHECKPOINT" ]; then
-    echo "Error: --checkpoint is required"
-    exit 1
+	echo "Error: --checkpoint is required"
+	exit 1
 fi
 
 # Set output directories based on checkpoint location
@@ -74,7 +98,7 @@ SAMPLE_CMD="python sample.py \
 
 [ -n "$NUM_STEPS" ] && SAMPLE_CMD="$SAMPLE_CMD --num_steps $NUM_STEPS"
 
-eval $SAMPLE_CMD
+eval "$SAMPLE_CMD"
 
 # Step 2: Run fidelity
 echo ""
@@ -88,7 +112,7 @@ FIDELITY_CMD="fidelity --gpu 0 --batch-size $BATCH_SIZE --cache-root $CACHE_DIR 
 [[ "$METRICS" == *"kid"* ]] && FIDELITY_CMD="$FIDELITY_CMD --kid"
 [[ "$METRICS" == *"is"* ]] && FIDELITY_CMD="$FIDELITY_CMD --isc"
 
-eval $FIDELITY_CMD
+eval "$FIDELITY_CMD"
 
 echo ""
 echo "=========================================="

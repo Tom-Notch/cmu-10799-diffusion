@@ -9,15 +9,15 @@
 # Installation:
 #   pip install -r environments/requirements-cpu.txt
 
---index-url https://download.pytorch.org/whl/cpu
 --extra-index-url https://pypi.org/simple
-
-torch>=2.0.0
-torchvision>=0.15.0
-torchaudio>=2.0.0
+--index-url https://download.pytorch.org/whl/cpu
 
 # Include base requirements
 -r requirements.txt
 
 # Modal CLI for cloud training
 modal>=0.63.0
+
+torch>=2.0.0
+torchaudio>=2.0.0
+torchvision>=0.15.0

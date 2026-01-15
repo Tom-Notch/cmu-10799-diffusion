@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Sampling Script for DDPM (Denoising Diffusion Probabilistic Models)
 
@@ -22,34 +23,31 @@ What you need to implement:
 - Save generated samples as images for logging
 """
 
-import os
-import sys
 import argparse
+import os
 from datetime import datetime
 
-import yaml
 import torch
 from tqdm import tqdm
 
-from src.models import create_model_from_config
-from src.data import save_image
 from src.methods import DDPM
+from src.models import create_model_from_config
 from src.utils import EMA
 
 
 def load_checkpoint(checkpoint_path: str, device: torch.device):
     """Load checkpoint and return model, config, and EMA."""
     checkpoint = torch.load(checkpoint_path, map_location=device)
-    config = checkpoint['config']
-    
+    config = checkpoint["config"]
+
     # Create model
     model = create_model_from_config(config).to(device)
-    model.load_state_dict(checkpoint['model'])
-    
+    model.load_state_dict(checkpoint["model"])
+
     # Create EMA and load
-    ema = EMA(model, decay=config['training']['ema_decay'])
-    ema.load_state_dict(checkpoint['ema'])
-    
+    ema = EMA(model, decay=config["training"]["ema_decay"])
+    ema.load_state_dict(checkpoint["ema"])
+
     return model, config, ema
 
 
@@ -71,70 +69,83 @@ def save_samples(
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate samples from trained model')
-    parser.add_argument('--checkpoint', type=str, required=True,
-                       help='Path to model checkpoint')
-    parser.add_argument('--method', type=str, required=True,
-                       choices=['ddpm'], # You can add more later
-                       help='Method used for training (currently only ddpm is supported)')
-    parser.add_argument('--num_samples', type=int, default=64,
-                       help='Number of samples to generate')
-    parser.add_argument('--output_dir', type=str, default='samples',
-                       help='Directory to save individual images (default: samples)')
-    parser.add_argument('--grid', action='store_true',
-                       help='Save as grid image instead of individual images')
-    parser.add_argument('--output', type=str, default=None,
-                       help='Output path for grid (only used with --grid, default: samples_<timestamp>.png)')
-    parser.add_argument('--batch_size', type=int, default=64,
-                       help='Batch size for generation')
-    parser.add_argument('--seed', type=int, default=None,
-                       help='Random seed for reproducibility')
-    
+    parser = argparse.ArgumentParser(description="Generate samples from trained model")
+    parser.add_argument("--checkpoint", type=str, required=True, help="Path to model checkpoint")
+    parser.add_argument(
+        "--method",
+        type=str,
+        required=True,
+        choices=["ddpm"],  # You can add more later
+        help="Method used for training (currently only ddpm is supported)",
+    )
+    parser.add_argument("--num_samples", type=int, default=64, help="Number of samples to generate")
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="samples",
+        help="Directory to save individual images (default: samples)",
+    )
+    parser.add_argument(
+        "--grid", action="store_true", help="Save as grid image instead of individual images"
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=None,
+        help="Output path for grid (only used with --grid, default: samples_<timestamp>.png)",
+    )
+    parser.add_argument("--batch_size", type=int, default=64, help="Batch size for generation")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility")
+
     # Sampling arguments
-    parser.add_argument('--num_steps', type=int, default=None,
-                       help='Number of sampling steps (default: from config)')
-    
+    parser.add_argument(
+        "--num_steps",
+        type=int,
+        default=None,
+        help="Number of sampling steps (default: from config)",
+    )
+
     # Other options
-    parser.add_argument('--no_ema', action='store_true',
-                       help='Use training weights instead of EMA weights')
-    parser.add_argument('--device', type=str, default='cuda',
-                       help='Device to use')
-    
+    parser.add_argument(
+        "--no_ema", action="store_true", help="Use training weights instead of EMA weights"
+    )
+    parser.add_argument("--device", type=str, default="cuda", help="Device to use")
+
     args = parser.parse_args()
-    
+
     # Setup device
-    device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
+    device = torch.device(args.device if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
-    
+
     # Set seed
     if args.seed is not None:
         torch.manual_seed(args.seed)
         if torch.cuda.is_available():
             torch.cuda.manual_seed(args.seed)
-    
+
     # Load checkpoint
     print(f"Loading checkpoint from {args.checkpoint}...")
     model, config, ema = load_checkpoint(args.checkpoint, device)
-    
+
     # Create method
-    if args.method == 'ddpm':
+    if args.method == "ddpm":
         method = DDPM.from_config(model, config, device)
     else:
         raise ValueError(f"Unknown method: {args.method}. Only 'ddpm' is currently supported.")
-    
+
     # Apply EMA weights
     if not args.no_ema:
         print("Using EMA weights")
         ema.apply_shadow()
     else:
         print("Using training weights (no EMA)")
-    
+
     method.eval_mode()
-    
+
     # Image shape
-    data_config = config['data']
-    image_shape = (data_config['channels'], data_config['image_size'], data_config['image_size'])
-    
+    data_config = config["data"]
+    image_shape = (data_config["channels"], data_config["image_size"], data_config["image_size"])
+
     # Generate samples
     print(f"Generating {args.num_samples} samples...")
 
@@ -151,7 +162,7 @@ def main():
         while remaining > 0:
             batch_size = min(args.batch_size, remaining)
 
-            num_steps = args.num_steps or config['sampling']['num_steps']
+            num_steps = args.num_steps or config["sampling"]["num_steps"]
 
             samples = method.sample(
                 batch_size=batch_size,
@@ -177,7 +188,7 @@ def main():
     # Save samples
     if args.grid:
         # Concatenate all samples for grid
-        all_samples = torch.cat(all_samples, dim=0)[:args.num_samples]
+        all_samples = torch.cat(all_samples, dim=0)[: args.num_samples]
 
         if args.output is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -193,5 +204,5 @@ def main():
         ema.restore()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Base Class for Generative Methods
 
@@ -7,7 +8,7 @@ implementations.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional, Tuple
+from typing import Any, Dict, Tuple
 
 import torch
 import torch.nn as nn
@@ -36,88 +37,77 @@ class BaseMethod(nn.Module, ABC):
         super().__init__()
         self.model = model
         self.device = device
-    
+
     @abstractmethod
-    def compute_loss(
-        self, 
-        x: torch.Tensor,
-        **kwargs
-    ) -> Tuple[torch.Tensor, Dict[str, float]]:
+    def compute_loss(self, x: torch.Tensor, **kwargs) -> Tuple[torch.Tensor, Dict[str, float]]:
         """
         Compute the training loss for a batch of data.
-        
+
         Args:
             x: Clean data samples of shape (batch_size, channels, height, width)
             **kwargs: Additional method-specific arguments
-        
+
         Returns:
             loss: Scalar loss tensor for backpropagation
             metrics: Dictionary of metrics for logging (e.g., {'mse': 0.1})
         """
-        pass
-    
+
     @abstractmethod
-    def sample(
-        self,
-        batch_size: int,
-        image_shape: Tuple[int, int, int],
-        **kwargs
-    ) -> torch.Tensor:
+    def sample(self, batch_size: int, image_shape: Tuple[int, int, int], **kwargs) -> torch.Tensor:
         """
         Generate samples from the model.
-        
+
         Args:
             batch_size: Number of samples to generate
             image_shape: Shape of each image (channels, height, width)
             **kwargs: Additional method-specific arguments (e.g., num_steps)
-        
+
         Returns:
             samples: Generated samples of shape (batch_size, *image_shape)
         """
-        pass
-    
+
     def train_mode(self):
         """Set the model to training mode."""
         self.model.train()
-    
+
     def eval_mode(self):
         """Set the model to evaluation mode."""
         self.model.eval()
-    
-    def to(self, device: torch.device) -> 'BaseMethod':
+
+    def to(self, device: torch.device) -> "BaseMethod":
         """
         Move the method to a device.
-        
+
         Args:
             device: Target device
-        
+
         Returns:
             self for chaining
         """
         self.model = self.model.to(device)
         self.device = device
         return self
-    
+
     def parameters(self):
         """Return model parameters for optimizer."""
         return self.model.parameters()
-    
+
     def state_dict(self) -> Dict[str, Any]:
         """
         Get the state dict for checkpointing.
-        
+
         Returns:
             Dictionary containing method state
         """
         return {
-            'model': self.model.state_dict(),
+            "model": self.model.state_dict(),
         }
-    
+
     def load_state_dict(self, state_dict: Dict[str, Any]):
         """
         Load a state dict from a checkpoint.
-        
+
         Args:
             state_dict: State dict to load
         """
-        self.model.load_state_dict(state_dict['model'])
+        self.model.load_state_dict(state_dict["model"])

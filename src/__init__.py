@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 CMU 10799 Diffusion & Flow Matching Homework - Educational implementation of DDPM and Flow Matching
 

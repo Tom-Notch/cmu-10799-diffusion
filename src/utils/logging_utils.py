@@ -1,18 +1,19 @@
+#!/usr/bin/env python3
 """
 Logging utilities for cmu-10799-diffusion.
 
 Provides unified logging setup for training, sampling, and evaluation.
 """
 
+import logging
 import os
 import sys
-import logging
 from typing import Optional
 
 
 def setup_logger(
     log_dir: str,
-    name: str = 'main',
+    name: str = "main",
     log_file: Optional[str] = None,
     level: int = logging.INFO,
 ) -> logging.Logger:
@@ -34,14 +35,13 @@ def setup_logger(
 
     # Create formatters
     detailed_formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
-    simple_formatter = logging.Formatter('%(message)s')
+    simple_formatter = logging.Formatter("%(message)s")
 
     # File handler - detailed logs
     if log_file is None:
-        log_file = f'{name}.log'
+        log_file = f"{name}.log"
 
     os.makedirs(log_dir, exist_ok=True)
     file_path = os.path.join(log_dir, log_file)

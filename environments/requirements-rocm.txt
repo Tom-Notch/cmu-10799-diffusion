@@ -8,12 +8,12 @@
 # Installation:
 #   pip install -r environments/requirements-rocm.txt
 
---index-url https://download.pytorch.org/whl/rocm6.3
 --extra-index-url https://pypi.org/simple
-
-torch>=2.0.0
-torchvision>=0.15.0
-torchaudio>=2.0.0
+--index-url https://download.pytorch.org/whl/rocm6.3
 
 # Include base requirements
 -r requirements.txt
+
+torch>=2.0.0
+torchaudio>=2.0.0
+torchvision>=0.15.0

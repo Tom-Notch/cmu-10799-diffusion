@@ -8,7 +8,7 @@ This repository contains your starter code for all four homework assignments. Yo
 
 ## Project Structure
 
-```
+```Shell
 cmu-10799-diffusion/
 ├── train.py                  # Training script
 ├── sample.py                 # Sampling script
@@ -61,13 +61,14 @@ cmu-10799-diffusion/
 ## List of TODOs
 
 1. src/data/celeba.py: fill in your data transforms functions
-2. src/methods/ddpm.py: implement everything in this file
-3. src/models/unet.py: implement the unet model architecture and its forward pass
-4. configs/: create your own model configs
-5. train.py: incorporate your sampling scheme to the training pipeline and save generated samples as images for logging
-6. sample.py: incorporate your sampling scheme to the training pipeline and save generated samples as images
+1. src/methods/ddpm.py: implement everything in this file
+1. src/models/unet.py: implement the unet model architecture and its forward pass
+1. configs/: create your own model configs
+1. train.py: incorporate your sampling scheme to the training pipeline and save generated samples as images for logging
+1. sample.py: incorporate your sampling scheme to the training pipeline and save generated samples as images
 
 ## Example scripts & Helper skeleton notebooks
+
 Besides the parts that you need to implement, the starter code also provides several example scripts & helper notebook skeleton to help you get started.
 
 The scripts are stored in scripts/ and the notebooks are stored in notebooks/. Feel free to use (or not use), add, delete or modify any and all parts of these scripts and notebooks.
@@ -76,7 +77,7 @@ The scripts are stored in scripts/ and the notebooks are stored in notebooks/. F
 
 ### 1. Setup Environment
 
-```bash
+```Shell
 git clone <repo-url>
 cd cmu-10799-diffusion
 
@@ -92,13 +93,13 @@ source .venv-cuda121/bin/activate    # If CUDA 12.1 was detected
 
 ### 2. Download Dataset
 
-```bash
+```Shell
 python download_dataset.py
 ```
 
 ### 3. Train (SLURM Cluster)
 
-```bash
+```Shell
 # Train DDPM (uses configs/ddpm.yaml by default)
 sbatch scripts/train.sh ddpm
 
@@ -113,7 +114,7 @@ sbatch scripts/train.sh ddpm --resume checkpoints/ddpm_50000.pt
 
 For students without a local GPU:
 
-```bash
+```Shell
 # First time: cache dataset to Modal volume
 modal run modal_app.py --action download
 
@@ -125,7 +126,7 @@ See [docs/QUICKSTART-MODAL.md](docs/QUICKSTART-MODAL.md) for complete Modal setu
 
 ### 5. Evaluate
 
-```bash
+```Shell
 # Evaluate using torch-fidelity (local/cluster)
 ./scripts/evaluate_torch_fidelity.sh ddpm checkpoints/ddpm/ddpm_final.pt
 
@@ -139,7 +140,7 @@ See [docs/QUICKSTART-MODAL.md](docs/QUICKSTART-MODAL.md) for complete Modal setu
 - `02_dataset_exploration.ipynb` - Explore CelebA dataset
 - `03_sampling_visualization.ipynb` - Visualize your samples
 
----
+______________________________________________________________________
 
 ## Manual Installation
 
@@ -149,7 +150,7 @@ If the setup scripts don't work for your system, you can set up manually.
 
 [uv](https://github.com/astral-sh/uv) is a fast Python package manager (10-100x faster than pip).
 
-```bash
+```Shell
 # 1. Install uv (one-time)
 curl -LsSf https://astral.sh/uv/install.sh | sh   # macOS/Linux
 # or: pip install uv
@@ -178,7 +179,7 @@ python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.
 
 Check your CUDA version: `nvidia-smi` (top right shows "CUDA Version: XX.X")
 
-```bash
+```Shell
 # 1. Clone and enter repo
 git clone <repo-url>
 cd cmu-10799-diffusion
@@ -201,7 +202,7 @@ python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.
 
 See [docs/SETUP.md](docs/SETUP.md) for detailed instructions for Modal, AWS, and SLURM clusters.
 
----
+______________________________________________________________________
 
 ## Running Customized Commands Manually
 
@@ -209,13 +210,13 @@ If you prefer to run Python commands directly instead of using the provided scri
 
 ### Training
 
-```bash
+```Shell
 python train.py --method ddpm --config configs/ddpm.yaml
 ```
 
 ### Generating Samples
 
-```bash
+```Shell
 python sample.py --checkpoint checkpoints/ddpm_final.pt --method ddpm --num_samples 64
 
 # With custom number of sampling steps
@@ -226,7 +227,7 @@ python sample.py --checkpoint checkpoints/ddpm_final.pt --method ddpm --num_step
 
 Use the provided shell scripts that wrap `torch-fidelity`:
 
-```bash
+```Shell
 # Evaluate locally or on cluster
 ./scripts/evaluate_torch_fidelity.sh ddpm checkpoints/ddpm_final.pt
 
@@ -236,7 +237,7 @@ Use the provided shell scripts that wrap `torch-fidelity`:
 
 ### Modal (Advanced Options)
 
-```bash
+```Shell
 # Train with custom config
 modal run modal_app.py --action train --method ddpm --config configs/custom.yaml
 
@@ -245,7 +246,8 @@ modal run modal_app.py --action train --method ddpm --iterations 50000
 ```
 
 To enable Weights & Biases logging on Modal:
-```bash
+
+```Shell
 modal secret create wandb-api-key WANDB_API_KEY=your_real_key
 ```
 
@@ -253,8 +255,7 @@ modal secret create wandb-api-key WANDB_API_KEY=your_real_key
 
 All hyperparameters are controlled via config files. Edit `configs/ddpm*.yaml` to configurate your model.
 
----
-
+______________________________________________________________________
 
 ## Authors
 
