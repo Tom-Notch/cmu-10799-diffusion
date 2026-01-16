@@ -12,7 +12,7 @@ This guide is for students who have a laptop without a GPU and want to use Modal
 
 ### 1. Set up local environment (CPU-only)
 
-```bash
+```Shell
 # Clone the repository
 git clone <repo-url>
 cd cmu-10799-diffusion
@@ -26,7 +26,7 @@ source .venv-cpu/bin/activate
 
 ### 2. Set up Modal
 
-```bash
+```Shell
 # Install Modal (if not already installed)
 pip install modal
 
@@ -36,7 +36,7 @@ modal token new
 
 ### 3. Weights & Biases (wandb) logging on Modal
 
-```bash
+```Shell
 # Create a Modal secret that holds your API key
 modal secret create wandb-api-key WANDB_API_KEY=your_real_key
 ```
@@ -54,7 +54,7 @@ def train(...):
 
 ### 4. Verify setup
 
-```bash
+```Shell
 # Test local environment
 python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
 # Should show: CUDA: False (this is expected for CPU-only setup!)
@@ -72,7 +72,7 @@ modal app list
 
 ### One-time setup: Download dataset to Modal volume (RECOMMENDED)
 
-```bash
+```Shell
 # Download dataset from HuggingFace Hub and cache it in Modal's persistent volume
 # This only needs to be done ONCE - the dataset will be reused for all future training runs
 modal run modal_app.py --action download
@@ -82,7 +82,7 @@ This downloads the CelebA dataset and saves it in HuggingFace Arrow format to `/
 
 ### Training on Modal (cloud GPU)
 
-```bash
+```Shell
 # Train DDPM (runs on L40S GPU in the cloud, uses configs/ddpm.yaml)
 modal run modal_app.py --action train --method ddpm
 
@@ -102,7 +102,7 @@ modal run modal_app.py --action train --method ddpm --config configs/custom.yaml
 
 ### Generate samples
 
-```bash
+```Shell
 # Generate samples from trained model
 modal run modal_app.py --action sample --method ddpm
 
@@ -112,7 +112,7 @@ modal run modal_app.py --action sample --method ddpm --checkpoint checkpoints/dd
 
 ### Evaluate (using torch-fidelity)
 
-```bash
+```Shell
 # Evaluate using torch-fidelity (computes FID and KID)
 modal run modal_app.py --action evaluate --method ddpm
 
@@ -128,7 +128,7 @@ modal run modal_app.py --action evaluate --method ddpm \
 
 Your checkpoints and data are stored in Modal volumes (persistent cloud storage).
 
-```bash
+```Shell
 # List all files in your Modal volume
 modal volume ls cmu-10799-diffusion-data
 

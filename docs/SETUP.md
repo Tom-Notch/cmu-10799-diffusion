@@ -32,7 +32,7 @@ ______________________________________________________________________
 
 **Check your CUDA version** (if you have an NVIDIA GPU):
 
-```bash
+```Shell
 nvidia-smi  # Look at top right for "CUDA Version: XX.X"
 ```
 
@@ -46,14 +46,14 @@ The easiest way to get started is using the setup scripts that auto-detect your 
 
 #### Step 1: Clone the repository
 
-```bash
+```Shell
 git clone <repo-url>
 cd cmu-10799-diffusion
 ```
 
 #### Step 2: Run the setup script
 
-```bash
+```Shell
 # Run setup script (auto-detects GPU)
 ./setup-uv.sh                 # Using uv (10-100x faster than pip)
 # or
@@ -69,7 +69,7 @@ The setup scripts will:
 
 #### Step 3: Activate the environment
 
-```bash
+```Shell
 # Activate the environment (name depends on detected hardware)
 source .venv-cpu/bin/activate        # If CPU was detected
 # or
@@ -78,7 +78,7 @@ source .venv-cuda121/bin/activate    # If CUDA 12.1 was detected
 
 **Manual environment selection:**
 
-```bash
+```Shell
 ./setup-uv.sh cpu      # Force CPU-only (for Modal users)
 ./setup-uv.sh cuda121  # Force CUDA 12.1
 ./setup-uv.sh cuda126  # Force CUDA 12.6
@@ -88,7 +88,7 @@ source .venv-cuda121/bin/activate    # If CUDA 12.1 was detected
 **Multiple environments:**
 You can have different environments on the same machine:
 
-```bash
+```Shell
 ./setup-uv.sh cpu      # Creates .venv-cpu
 ./setup-uv.sh cuda121  # Creates .venv-cuda121
 
@@ -107,7 +107,7 @@ ______________________________________________________________________
 
 **macOS/Linux:**
 
-```bash
+```Shell
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
@@ -119,20 +119,20 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 **Or with pip:**
 
-```bash
+```Shell
 pip install uv
 ```
 
 #### Step 2: Clone the repository
 
-```bash
+```Shell
 git clone <repo-url>
 cd cmu-10799-diffusion
 ```
 
 #### Step 3: Create named virtual environment
 
-```bash
+```Shell
 uv venv .venv-cpu              # For CPU
 # or
 uv venv .venv-cuda121          # For CUDA 12.1
@@ -142,7 +142,7 @@ uv venv .venv-cuda121          # For CUDA 12.1
 
 **macOS/Linux:**
 
-```bash
+```Shell
 source .venv-cpu/bin/activate        # For CPU
 # or
 source .venv-cuda121/bin/activate    # For GPU
@@ -160,7 +160,7 @@ source .venv-cuda121/bin/activate    # For GPU
 
 Choose the command for your hardware:
 
-```bash
+```Shell
 # Laptop / macOS / Modal users (no GPU)
 uv pip install -r environments/requirements-cpu.txt
 
@@ -179,7 +179,7 @@ uv pip install -r environments/requirements-rocm.txt
 
 #### Step 6: Verify installation
 
-```bash
+```Shell
 python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
 ```
 
@@ -196,14 +196,14 @@ Check your CUDA version: `nvidia-smi` (top right shows "CUDA Version: XX.X")
 
 #### Step 1: Clone the repository
 
-```bash
+```Shell
 git clone <repo-url>
 cd cmu-10799-diffusion
 ```
 
 #### Step 2: Create named virtual environment
 
-```bash
+```Shell
 python -m venv .venv-cpu        # For CPU
 # or
 python -m venv .venv-cuda121    # For example, for CUDA 12.1
@@ -215,7 +215,7 @@ python -m venv .venv-cuda121    # For example, for CUDA 12.1
 
 **macOS/Linux:**
 
-```bash
+```Shell
 source .venv-cpu/bin/activate        # For CPU
 # or
 source .venv-cuda121/bin/activate    # For GPU
@@ -233,7 +233,7 @@ source .venv-cuda121/bin/activate    # For GPU
 
 Choose the command for your hardware:
 
-```bash
+```Shell
 # Laptop / macOS / Modal users (no GPU)
 pip install -r environments/requirements-cpu.txt
 
@@ -252,6 +252,6 @@ pip install -r environments/requirements-rocm.txt
 
 #### Step 5: Verify installation
 
-```bash
+```Shell
 python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
 ```

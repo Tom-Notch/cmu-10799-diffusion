@@ -6,7 +6,7 @@ This document explains the organization of the codebase.
 
 The root directory contains **essential files** - scripts you'll run frequently:
 
-```
+```Shell
 cmu-10799-diffusion/
 ├── train.py                 # Main training script
 ├── sample.py                # Generate samples from trained models
@@ -29,7 +29,7 @@ cmu-10799-diffusion/
 
 The main implementation:
 
-```
+```Shell
 src/
 ├── __init__.py
 ├── models/                 # U-Net architecture
@@ -59,7 +59,7 @@ src/
 
 Training hyperparameters and model settings:
 
-```
+```Shell
 configs/
 ├── ddpm_modal.yaml         # DDPM config for Modal cloud training
 └── ddpm_babel.yaml         # DDPM config for Babel cluster
@@ -72,7 +72,7 @@ Create your own model configs
 
 Requirements files for different hardware setups:
 
-```
+```Shell
 environments/
 ├── requirements.txt           # Base dependencies
 ├── requirements-cpu.txt       # CPU-only PyTorch
@@ -92,7 +92,7 @@ environments/
 
 All guides and documentation:
 
-```
+```Shell
 docs/
 ├── SETUP.md                 # Detailed setup for all platforms (Modal, AWS, SLURM)
 ├── QUICKSTART-MODAL.md      # 5-minute quick start for Modal users
@@ -108,7 +108,7 @@ docs/
 
 Example scripts for cluster and Modal environments, feel free to modify:
 
-```
+```Shell
 scripts/
 ├── train.sh                          # SLURM job template (tested on babel)
 ├── evaluate_torch_fidelity.sh        # torch-fidelity evaluation on cluster or locally (tested on babel)
@@ -120,7 +120,7 @@ scripts/
 
 Helper notebooks skeleton for exploration and visualization, feel free to modify:
 
-```
+```Shell
 notebooks/
 ├── 01_1d_playground.ipynb            # 1D diffusion experiments for intuition
 ├── 02_dataset_exploration.ipynb      # Explore CelebA dataset

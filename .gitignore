@@ -726,7 +726,7 @@ dist/
 *.ipynb_checkpoints
 
 # Data
-data/
+/data/
 datasets/
 *.npz
 *.npy
