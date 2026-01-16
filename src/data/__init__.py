@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Data module for cmu-10799-diffusion.
 

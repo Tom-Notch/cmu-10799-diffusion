@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 CelebA Dataset Loading and Preprocessing
 
