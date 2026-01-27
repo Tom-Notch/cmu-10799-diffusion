@@ -28,6 +28,7 @@ import os
 from datetime import datetime
 
 import torch
+from torchvision.utils import make_grid, save_image
 from tqdm import tqdm
 
 from src.methods import DDPM
@@ -56,16 +57,22 @@ def save_samples(
     save_path: str,
     num_samples: int,
 ) -> None:
-    """
-    TODO: save generated samples as images.
+    """save generated samples as images.
 
     Args:
         samples: Generated samples tensor with shape (num_samples, C, H, W).
         save_path: File path to save the image grid.
         num_samples: Number of samples, used to calculate grid layout.
     """
+    # samples: (N,C,H,W) assumed in [-1,1]
+    samples = samples.clamp(-1, 1)
+    samples = (samples + 1.0) / 2.0  # to [0,1]
 
-    raise NotImplementedError
+    nrow = int(num_samples**0.5)
+    nrow = max(1, nrow)
+
+    grid = make_grid(samples, nrow=nrow, padding=2)
+    save_image(grid, save_path)
 
 
 def main():
@@ -168,7 +175,6 @@ def main():
                 batch_size=batch_size,
                 image_shape=image_shape,
                 num_steps=num_steps,
-                # TODO: add your arugments here
             )
 
             # Save individual images immediately or collect for grid

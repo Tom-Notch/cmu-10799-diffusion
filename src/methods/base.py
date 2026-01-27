@@ -84,6 +84,7 @@ class BaseMethod(nn.Module, ABC):
         Returns:
             self for chaining
         """
+        super().to(device)
         self.model = self.model.to(device)
         self.device = device
         return self

@@ -1,12 +1,15 @@
-#!/bin/bash
-#SBATCH --job-name=cmu-10799-diffusion
+#!/bin/bash -l
+#SBATCH --job-name=diffusion
 #SBATCH --output=logs/%x_%j.out
 #SBATCH --error=logs/%x_%j.err
 #SBATCH --time=24:00:00
-#SBATCH --partition=general
-#SBATCH --gres=gpu:L40S:4
-#SBATCH --cpus-per-task=8
+#SBATCH --partition=a100-gpu-shared
+#SBATCH --ntasks-per-node=1 # number of tasks per node
+#SBATCH --gpus-per-task=1 # number of GPUs per task
+#SBATCH --cpus-per-task=16 # number of CPU cores per task
 #SBATCH --mem=64G
+#SBATCH --mail-type END
+#SBATCH --mail-user mukaiy@andrew.cmu.edu
 
 # =============================================================================
 # SLURM Job Script for CMU 10799 Diffusion & Flow Matching Homework
@@ -66,34 +69,36 @@ mkdir -p logs
 # module load cudnn/8.9
 # module load python/3.11
 
-# Activate virtual environment
-# Check for all possible venv directories
-if [ -d ".venv-cuda129" ]; then
-	echo "Using .venv-cuda129"
-	source .venv-cuda129/bin/activate
-elif [ -d ".venv-cuda126" ]; then
-	echo "Using .venv-cuda126"
-	source .venv-cuda126/bin/activate
-elif [ -d ".venv-cuda121" ]; then
-	echo "Using .venv-cuda121"
-	source .venv-cuda121/bin/activate
-elif [ -d ".venv-cuda118" ]; then
-	echo "Using .venv-cuda118"
-	source .venv-cuda118/bin/activate
-elif [ -d ".venv-rocm" ]; then
-	echo "Using .venv-rocm"
-	source .venv-rocm/bin/activate
-elif [ -d ".venv-cpu" ]; then
-	echo "Using .venv-cpu"
-	source .venv-cpu/bin/activate
-elif [ -d ".venv" ]; then
-	echo "Using .venv"
-	source .venv/bin/activate
-else
-	echo "ERROR: No virtual environment found. Please set up environment first."
-	echo "Run: ./setup-uv.sh or ./setup.sh"
-	exit 1
-fi
+# # Activate virtual environment
+# # Check for all possible venv directories
+# if [ -d ".venv-cuda129" ]; then
+# 	echo "Using .venv-cuda129"
+# 	source .venv-cuda129/bin/activate
+# elif [ -d ".venv-cuda126" ]; then
+# 	echo "Using .venv-cuda126"
+# 	source .venv-cuda126/bin/activate
+# elif [ -d ".venv-cuda121" ]; then
+# 	echo "Using .venv-cuda121"
+# 	source .venv-cuda121/bin/activate
+# elif [ -d ".venv-cuda118" ]; then
+# 	echo "Using .venv-cuda118"
+# 	source .venv-cuda118/bin/activate
+# elif [ -d ".venv-rocm" ]; then
+# 	echo "Using .venv-rocm"
+# 	source .venv-rocm/bin/activate
+# elif [ -d ".venv-cpu" ]; then
+# 	echo "Using .venv-cpu"
+# 	source .venv-cpu/bin/activate
+# elif [ -d ".venv" ]; then
+# 	echo "Using .venv"
+# 	source .venv/bin/activate
+# else
+# 	echo "ERROR: No virtual environment found. Please set up environment first."
+# 	echo "Run: ./setup-uv.sh or ./setup.sh"
+# 	exit 1
+# fi
+
+conda activate 10-799
 
 # Print environment info
 echo ""

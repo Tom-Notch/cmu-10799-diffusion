@@ -39,6 +39,7 @@ from PIL import Image as PILImage
 from torch.amp import GradScaler, autocast
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
+from torchvision.utils import make_grid, save_image
 from tqdm import tqdm
 
 from src.data import create_dataloader_from_config
@@ -204,13 +205,10 @@ def generate_samples(
     config: dict,
     ema: Optional[EMA] = None,
     current_step: Optional[int] = None,
-    # TODO: add/delete your arguments here
     **sampling_kwargs,
 ) -> torch.Tensor:
     """
     Generate samples using EMA parameters if available.
-
-    TODO: incoporate your own sampling scheme here
 
     Args:
         method: The diffusion method object (e.g., DDPM) with sample() and eval/train mode methods.
@@ -235,8 +233,12 @@ def generate_samples(
     if use_ema:
         ema.apply_shadow()
 
-    samples = None
-    # TODO: sample with your method.sample()
+    # --- simplest: call method.sample ---
+    samples = (
+        method.sample(batch_size=num_samples, image_shape=image_shape, **sampling_kwargs)
+        .detach()
+        .to(device)
+    )
 
     if use_ema:
         ema.restore()
@@ -250,16 +252,22 @@ def save_samples(
     save_path: str,
     num_samples: int,
 ) -> None:
-    """
-    TODO: save generated samples as images.
+    """save generated samples as images.
 
     Args:
         samples: Generated samples tensor with shape (num_samples, C, H, W).
         save_path: File path to save the image grid.
         num_samples: Number of samples, used to calculate grid layout.
     """
+    # samples: (N,C,H,W) assumed in [-1,1]
+    samples = samples.clamp(-1, 1)
+    samples = (samples + 1.0) / 2.0  # to [0,1]
 
-    raise NotImplementedError
+    nrow = int(num_samples**0.5)
+    nrow = max(1, nrow)
+
+    grid = make_grid(samples, nrow=nrow, padding=2)
+    save_image(grid, save_path)
 
 
 def train(

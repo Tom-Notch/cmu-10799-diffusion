@@ -237,13 +237,15 @@ class CelebADataset(Dataset):
         """Build the preprocessing transforms."""
         transform_list = []
 
-        # TODO: write your image transforms & augmentation
-
         # Only resize if needed (dataset images are already 64x64)
 
-        # For Data augmentation you can do something like
-        # if self.augment and self.split == "train":
-        #     transform_list.append(...)
+        if self.augment and self.split == "train":
+            transform_list.append(transforms.RandomHorizontalFlip())
+
+        transform_list += [
+            transforms.ToTensor(),
+            transforms.Normalize([0.5] * 3, [0.5] * 3),
+        ]
 
         return transforms.Compose(transform_list)
 
