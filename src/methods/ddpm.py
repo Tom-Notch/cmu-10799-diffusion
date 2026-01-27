@@ -41,9 +41,8 @@ class DDPM(BaseMethod):
         T = self.num_timesteps
 
         # betas[1..T], betas[0] unused
-        betas_1T = torch.linspace(beta_start, beta_end, T, dtype=torch.float32)
-        betas = torch.zeros(T + 1, dtype=torch.float32)
-        betas[1:] = betas_1T
+        betas = torch.zeros(T + 1)
+        betas[1:] = torch.linspace(beta_start, beta_end, T)
         alphas = 1.0 - betas
         alpha_bars = torch.cumprod(alphas, dim=0)
 
@@ -54,7 +53,7 @@ class DDPM(BaseMethod):
         self.register_buffer("sqrt_one_minus_alpha_bars", torch.sqrt(1.0 - alpha_bars))
         self.register_buffer("sqrt_recip_alphas", torch.sqrt(1.0 / alphas))
 
-        posterior_var = torch.zeros(T + 1, dtype=torch.float32)
+        posterior_var = torch.zeros_like(betas)
         posterior_var[1:] = (  # valid only for t > 0
             betas[1:]
             * (1.0 - alpha_bars[:-1])  # alpha_bar_{t-1}
@@ -96,13 +95,13 @@ class DDPM(BaseMethod):
             metrics: Dictionary of metrics for logging (e.g., {'mse': 0.1})
         """
         B = x_0.shape[0]
-        t = torch.randint(1, self.num_timesteps, (B,), device=x_0.device, dtype=torch.long)
+        t = torch.randint(1, self.num_timesteps + 1, (B,), device=x_0.device)
         eps = torch.randn_like(x_0)
         x_t = self.forward_process(x_0, t, noise=eps)
 
         eps_pred = self.model(x_t, t)
         loss = F.mse_loss(eps_pred, eps)
-        return loss, {"loss": loss.detach().item(), "mse": loss.detach().item()}
+        return loss, {"loss": loss.detach().item()}
 
     # =========================================================================
     # Reverse process (sampling)
@@ -130,7 +129,7 @@ class DDPM(BaseMethod):
 
         var = self._extract(self.posterior_variance, t, x_t)
         z = torch.randn_like(x_t)
-        return mu + torch.sqrt(var) * z
+        return mu + torch.sqrt(var) * z * (t > 1).float().view(-1, 1, 1, 1)
 
     @torch.no_grad()
     def sample(
@@ -152,7 +151,7 @@ class DDPM(BaseMethod):
         self.eval_mode()
         x = torch.randn(batch_size, *image_shape, device=self.device)
 
-        for ti in reversed(range(1, self.num_timesteps)):
+        for ti in reversed(range(1, self.num_timesteps + 1)):
             t = torch.full((batch_size,), ti, device=self.device, dtype=torch.long)
             x = self.reverse_process(x, t)
 
