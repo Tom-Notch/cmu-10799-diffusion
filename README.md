@@ -229,10 +229,10 @@ Use the provided shell scripts that wrap `torch-fidelity`:
 
 ```Shell
 # Evaluate locally or on cluster
-./scripts/evaluate_torch_fidelity.sh ddpm checkpoints/ddpm_final.pt
+./scripts/evaluate_torch_fidelity.sh --method ddpm --checkpoint checkpoints/ddpm_final.pt
 
 # Evaluate on Modal
-./scripts/evaluate_modal_torch_fidelity.sh ddpm checkpoints/ddpm_final.pt
+./scripts/evaluate_modal_torch_fidelity.sh --method ddpm --checkpoint checkpoints/ddpm_final.pt
 ```
 
 ### Modal (Advanced Options)

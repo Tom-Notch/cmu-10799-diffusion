@@ -17,7 +17,7 @@ set -e
 # Defaults
 METHOD="ddpm" # (right now you only have ddpm but you will be implementing more methods as hw progresses)
 CHECKPOINT="YOUR_PATH"
-DATASET_PATH="data/celeba"
+DATASET_PATH="data/celeba-subset/train/images"
 METRICS="kid"
 NUM_SAMPLES=1000
 BATCH_SIZE=256

@@ -6,7 +6,7 @@ data:
     repo_name: electronickale/cmu-10799-celeba64-subset
     image_size: 64
     channels: 3
-    num_workers: 4
+    num_workers: 16
     pin_memory: true
     augment: true
 
@@ -20,12 +20,12 @@ model:
     use_scale_shift_norm: true
 
 training:
-    batch_size: 512 # int
+    batch_size: 256 # int
     learning_rate: 2.0e-4 # float
     weight_decay: 1.0e-4 # float
     betas: [0.9, 0.999] # list of float
     ema_decay: 0.9999 # float
-    ema_start: 5000 # int # This is the start iter to use EMA during sampling at training time, as using EMA at the beginning may not be very meaningful
+    ema_start: 50000 # int # This is the start iter to use EMA during sampling at training time, as using EMA at the beginning may not be very meaningful
     gradient_clip_norm: 1.0 # float
     num_iterations: 20000 # int
     log_every: 100 # int
@@ -46,7 +46,7 @@ infrastructure:
     seed: 42
     device: cuda
     num_gpus: 1 # int # 1 should be ok
-    mixed_precision: true # bool # both true and false should work
+    mixed_precision: false # bool # both true and false should work
     compile_model: false # only tested false
 
 checkpoint:
